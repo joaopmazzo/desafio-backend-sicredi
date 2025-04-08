@@ -1,0 +1,9 @@
+CREATE TABLE IF NOT EXISTS sessoes (
+    id SERIAL PRIMARY KEY,
+    pauta_id INT NOT NULL REFERENCES pautas(id),
+    status VARCHAR(50) NOT NULL,
+    inicio TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    termino TIMESTAMP NOT NULL,
+
+    CONSTRAINT UK_pauta UNIQUE (pauta_id)
+);
