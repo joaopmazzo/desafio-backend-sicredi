@@ -1,7 +1,7 @@
 CREATE TABLE IF NOT EXISTS votos (
-    id SERIAL PRIMARY KEY,
-    sessao_id INT NOT NULL REFERENCES sessoes(id),
-    associado_id INT NOT NULL,
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    sessao_id UUID NOT NULL REFERENCES sessoes(id),
+    associado_id UUID NOT NULL,
     voto BIT NOT NULL,
     registrado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
 
