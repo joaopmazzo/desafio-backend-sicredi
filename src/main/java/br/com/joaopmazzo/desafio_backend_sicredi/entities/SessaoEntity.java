@@ -1,7 +1,6 @@
 package br.com.joaopmazzo.desafio_backend_sicredi.entities;
 
 import br.com.joaopmazzo.desafio_backend_sicredi.enums.StatusSessaoEnum;
-import br.com.joaopmazzo.desafio_backend_sicredi.enums.VotoEnum;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
