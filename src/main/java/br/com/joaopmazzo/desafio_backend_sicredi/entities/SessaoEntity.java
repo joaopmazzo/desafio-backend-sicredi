@@ -41,4 +41,16 @@ public class SessaoEntity {
     @Column(nullable = false)
     private LocalDateTime termino;
 
+    @Transient
+    private Integer duracaoEmMinutos;
+
+    @PrePersist
+    public void prePersist() {
+        if (duracaoEmMinutos != null) {
+            termino = inicio != null
+                    ? inicio.plusMinutes(duracaoEmMinutos)
+                    : LocalDateTime.now().plusMinutes(duracaoEmMinutos);
+        }
+    }
+
 }
