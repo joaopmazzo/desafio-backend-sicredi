@@ -16,6 +16,8 @@ public class CreatePautaUseCase {
     private final PautaMapper pautaMapper;
 
     public PautaResponseDTO execute(PautaRequestDTO dto) {
+        pautaService.existsByTitulo(dto.titulo());
+
         PautaEntity entity = pautaMapper.toEntity(dto);
 
         PautaEntity savedEntity = pautaService.savePauta(entity);
