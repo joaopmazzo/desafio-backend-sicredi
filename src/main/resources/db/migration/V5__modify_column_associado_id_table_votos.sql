@@ -4,6 +4,5 @@ ALTER TABLE votos
     ADD CONSTRAINT FK_votos_associados
         FOREIGN KEY (associado_id) REFERENCES associados(id);
 
--- Recreate the unique constraint
 ALTER TABLE votos
     ADD CONSTRAINT UK_sessao_associado UNIQUE (sessao_id, associado_id);
