@@ -6,7 +6,9 @@ import br.com.joaopmazzo.desafio_backend_sicredi.application.dtos.request.VotoRe
 import br.com.joaopmazzo.desafio_backend_sicredi.application.dtos.response.PautaResponseDTO;
 import br.com.joaopmazzo.desafio_backend_sicredi.application.dtos.response.SessaoResponseDTO;
 import br.com.joaopmazzo.desafio_backend_sicredi.application.dtos.response.VotoResponseDTO;
-import br.com.joaopmazzo.desafio_backend_sicredi.domain.services.PautaService;
+import br.com.joaopmazzo.desafio_backend_sicredi.application.usecases.CreatePautaUseCase;
+import br.com.joaopmazzo.desafio_backend_sicredi.application.usecases.FindPautaUseCase;
+import br.com.joaopmazzo.desafio_backend_sicredi.application.usecases.ReturnPautasUseCase;
 import br.com.joaopmazzo.desafio_backend_sicredi.domain.services.SessaoService;
 import br.com.joaopmazzo.desafio_backend_sicredi.domain.services.VotoService;
 import jakarta.validation.Valid;
@@ -25,14 +27,17 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class PautaController {
 
-    private final PautaService pautaService;
+    private final CreatePautaUseCase createPautaUseCase;
+    private final ReturnPautasUseCase returnPautasUseCase;
+    private final FindPautaUseCase findPautaUseCase;
+
     private final SessaoService sessaoService;
     private final VotoService votoService;
 
     // pautas
     @PostMapping
     public ResponseEntity<PautaResponseDTO> createPauta(@Valid @RequestBody PautaRequestDTO dto) {
-        PautaResponseDTO pautaResponseDTO = pautaService.createPauta(dto);
+        PautaResponseDTO pautaResponseDTO = createPautaUseCase.execute(dto);
 
         URI location = UriComponentsBuilder
                 .fromPath("/api/v1/pautas/{id}")
@@ -44,14 +49,14 @@ public class PautaController {
 
     @GetMapping
     public ResponseEntity<Page<PautaResponseDTO>> getPautas(Pageable pageable) {
-        Page<PautaResponseDTO> pautaResponseDTO = pautaService.getPautas(pageable);
+        Page<PautaResponseDTO> pautaResponseDTO = returnPautasUseCase.execute(pageable);
 
         return ResponseEntity.ok(pautaResponseDTO);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<PautaResponseDTO> getPautaById(@PathVariable UUID id) {
-        PautaResponseDTO pautaResponseDTO = pautaService.getPautaById(id);
+        PautaResponseDTO pautaResponseDTO = findPautaUseCase.execute(id);
 
         return ResponseEntity.ok(pautaResponseDTO);
     }
