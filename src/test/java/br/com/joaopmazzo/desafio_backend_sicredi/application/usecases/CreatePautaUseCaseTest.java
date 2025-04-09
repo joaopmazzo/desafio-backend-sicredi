@@ -6,12 +6,12 @@ import br.com.joaopmazzo.desafio_backend_sicredi.application.exceptions.pauta.Du
 import br.com.joaopmazzo.desafio_backend_sicredi.domain.entities.PautaEntity;
 import br.com.joaopmazzo.desafio_backend_sicredi.domain.services.PautaService;
 import br.com.joaopmazzo.desafio_backend_sicredi.infrastructure.mappers.PautaMapper;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -19,6 +19,7 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 public class CreatePautaUseCaseTest {
 
     @Mock
@@ -29,11 +30,6 @@ public class CreatePautaUseCaseTest {
 
     @InjectMocks
     private CreatePautaUseCase createPautaUseCase;
-
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
-    }
 
     @Test
     @DisplayName("Should create a Pauta successfully when valid data is provided")
