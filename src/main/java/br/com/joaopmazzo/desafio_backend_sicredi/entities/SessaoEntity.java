@@ -26,12 +26,13 @@ public class SessaoEntity {
     private UUID id;
 
     @OneToOne()
-    @JoinColumn(name = "pauta_id", insertable = false, updatable = false)
+    @JoinColumn(name = "pauta_id")
     private PautaEntity pauta;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private StatusSessaoEnum status;
+    @Builder.Default
+    private StatusSessaoEnum status = StatusSessaoEnum.EM_ANDAMENTO;
 
     @Column(nullable = false, updatable = false)
     @CreationTimestamp

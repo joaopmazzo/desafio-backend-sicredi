@@ -11,7 +11,7 @@ public class SessaoResponseDTO {
 
     private UUID id;
 
-    private UUID pautaId;
+    private PautaResponseDTO pauta;
 
     private StatusSessaoEnum status;
 
