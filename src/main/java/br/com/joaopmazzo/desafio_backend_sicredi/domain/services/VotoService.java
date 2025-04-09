@@ -2,6 +2,10 @@ package br.com.joaopmazzo.desafio_backend_sicredi.domain.services;
 
 import br.com.joaopmazzo.desafio_backend_sicredi.application.dtos.request.VotoRequestDTO;
 import br.com.joaopmazzo.desafio_backend_sicredi.application.dtos.response.VotoResponseDTO;
+import br.com.joaopmazzo.desafio_backend_sicredi.application.exceptions.associado.AssociadoNaoPodeVotarException;
+import br.com.joaopmazzo.desafio_backend_sicredi.application.exceptions.associado.AssociadoNotFoundException;
+import br.com.joaopmazzo.desafio_backend_sicredi.application.exceptions.sessao.SessaoEncerradaException;
+import br.com.joaopmazzo.desafio_backend_sicredi.application.exceptions.voto.VotoJaRegistradoException;
 import br.com.joaopmazzo.desafio_backend_sicredi.domain.entities.AssociadoEntity;
 import br.com.joaopmazzo.desafio_backend_sicredi.domain.entities.SessaoEntity;
 import br.com.joaopmazzo.desafio_backend_sicredi.domain.entities.VotoEntity;
@@ -29,19 +33,17 @@ public class VotoService {
         SessaoEntity sessao = sessaoService.findSessaoByPautaId(pautaId);
 
         if (sessao.getStatus() == StatusSessaoEnum.ENCERRADA || sessao.getTermino().isBefore(LocalDateTime.now()))
-            throw new RuntimeException("Não é possível registrar o voto, pois a sessão esta encerrada.");
+            throw new SessaoEncerradaException();
 
         // retorna o associado e valida se o mesmo pode votar
         AssociadoEntity associado = associadoRepository
                 .findByDocumento(dto.documento())
-                .orElseThrow(
-                        () -> new RuntimeException("Associado não encontrado.")
-                );
-        if (!associado.isAbleToVote()) throw new RuntimeException("Desculpe, mas você nao pode votar.");
+                .orElseThrow(AssociadoNotFoundException::new);
+        if (!associado.isAbleToVote()) throw new AssociadoNaoPodeVotarException();
 
         // Validar se o associado já votou, se sim jogar uma exceção
         boolean jaVotou = votoRepository.existsBySessaoAndAssociado(sessao, associado);
-        if (jaVotou) throw new RuntimeException("O associado já registrou um voto nesta sessão.");
+        if (jaVotou) throw new VotoJaRegistradoException();
 
         // Criar entidade para computar o voto com os atributos necessários
         VotoEntity voto = VotoEntity.builder()

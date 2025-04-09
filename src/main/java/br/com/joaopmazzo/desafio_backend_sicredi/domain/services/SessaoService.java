@@ -2,6 +2,8 @@ package br.com.joaopmazzo.desafio_backend_sicredi.domain.services;
 
 import br.com.joaopmazzo.desafio_backend_sicredi.application.dtos.request.SessaoRequestDTO;
 import br.com.joaopmazzo.desafio_backend_sicredi.application.dtos.response.SessaoResponseDTO;
+import br.com.joaopmazzo.desafio_backend_sicredi.application.exceptions.sessao.SessaoJaAbertaException;
+import br.com.joaopmazzo.desafio_backend_sicredi.application.exceptions.sessao.SessaoNotFoundException;
 import br.com.joaopmazzo.desafio_backend_sicredi.domain.entities.PautaEntity;
 import br.com.joaopmazzo.desafio_backend_sicredi.domain.entities.SessaoEntity;
 import br.com.joaopmazzo.desafio_backend_sicredi.domain.enums.StatusSessaoEnum;
@@ -53,12 +55,12 @@ public class SessaoService {
     public SessaoEntity findSessaoByPautaId(UUID id) {
         return sessaoRepository
                 .findByPautaId(id)
-                .orElseThrow(() -> new RuntimeException("Nenhuma sessão em andamento para a pauta informada"));
+                .orElseThrow(SessaoNotFoundException::new);
     }
 
     public void existsSessaoByPautaIdAndStatusNotLikeCancelado(UUID pautaID) {
         if (sessaoRepository.existsByPautaIdAndStatusNotLikeCancelado(pautaID)) {
-            throw new RuntimeException("Já existe uma sessão aberta para esta pauta");
+            throw new SessaoJaAbertaException();
         }
     }
 

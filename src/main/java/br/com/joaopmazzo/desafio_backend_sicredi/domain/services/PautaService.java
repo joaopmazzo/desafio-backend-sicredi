@@ -1,5 +1,6 @@
 package br.com.joaopmazzo.desafio_backend_sicredi.domain.services;
 
+import br.com.joaopmazzo.desafio_backend_sicredi.application.exceptions.pauta.PautaNotFoundException;
 import br.com.joaopmazzo.desafio_backend_sicredi.domain.entities.PautaEntity;
 import br.com.joaopmazzo.desafio_backend_sicredi.domain.repositories.PautaRepository;
 import jakarta.transaction.Transactional;
@@ -19,9 +20,7 @@ public class PautaService {
     public PautaEntity findPautaById(UUID id) {
         return pautaRepository
                 .findById(id)
-                .orElseThrow(
-                        () -> new RuntimeException("Pauta não encontrada com o id: " + id)
-                );
+                .orElseThrow(PautaNotFoundException::new);
     }
 
     public Page<PautaEntity> returnPautasPageable(Pageable pageable) {
