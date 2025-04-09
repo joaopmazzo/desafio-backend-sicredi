@@ -1,6 +1,6 @@
 package br.com.joaopmazzo.desafio_backend_sicredi.dtos.response;
 
-import br.com.joaopmazzo.desafio_backend_sicredi.enums.VotoEnum;
+import br.com.joaopmazzo.desafio_backend_sicredi.enums.EscolhaVotoEnum;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -11,11 +11,11 @@ public class VotoResponseDTO {
 
     private UUID id;
 
-    private UUID sessaoId;
+    private SessaoResponseDTO sessao;
 
-    private UUID associadoId;
+    private AssociadoResponseDTO associado;
 
-    private VotoEnum status;
+    private EscolhaVotoEnum aFavor;
 
     private LocalDateTime registradoEm;
 

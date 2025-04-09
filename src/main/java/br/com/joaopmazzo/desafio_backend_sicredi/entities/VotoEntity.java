@@ -1,6 +1,6 @@
 package br.com.joaopmazzo.desafio_backend_sicredi.entities;
 
-import br.com.joaopmazzo.desafio_backend_sicredi.enums.VotoEnum;
+import br.com.joaopmazzo.desafio_backend_sicredi.enums.EscolhaVotoEnum;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,15 +26,16 @@ public class VotoEntity {
     private UUID id;
 
     @ManyToOne()
-    @JoinColumn(name = "sessao_id", insertable = false, updatable = false)
+    @JoinColumn(name = "sessao_id", nullable = false)
     private SessaoEntity sessao;
 
-    @Column(name = "associado_id")
-    private UUID associadoId;
+    @ManyToOne
+    @JoinColumn(name = "associado_id", nullable = false)
+    private AssociadoEntity associado;
 
-    @Column(nullable = false)
+    @Column(name = "a_favor", nullable = false)
     @Enumerated(EnumType.STRING)
-    private VotoEnum status;
+    private EscolhaVotoEnum aFavor;
 
     @Column(nullable = false, updatable = false)
     @CreationTimestamp

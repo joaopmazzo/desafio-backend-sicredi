@@ -1,5 +1,5 @@
 package br.com.joaopmazzo.desafio_backend_sicredi.enums;
 
-public enum VotoEnum {
+public enum EscolhaVotoEnum {
     SIM, NAO
 }
