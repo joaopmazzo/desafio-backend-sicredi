@@ -48,7 +48,7 @@ public class AbrirSessaoUseCaseTest {
         SessaoResponseDTO responseDTO = new SessaoResponseDTO();
 
         when(pautaService.findPautaById(pautaId)).thenReturn(pautaEntity);
-        doNothing().when(sessaoService).existsSessaoByPautaIdAndStatusNotLikeCancelado(pautaId);
+        doNothing().when(sessaoService).existsSessaoByPautaId(pautaId);
         when(sessaoMapper.toEntity(requestDTO)).thenReturn(sessaoEntityMapper);
         when(sessaoService.saveSessao(sessaoEntityMapper)).thenReturn(savedSessaoEntity);
         when(sessaoMapper.toResponseDTO(savedSessaoEntity)).thenReturn(responseDTO);
@@ -57,7 +57,7 @@ public class AbrirSessaoUseCaseTest {
 
         assertEquals(responseDTO, result);
         verify(pautaService).findPautaById(pautaId);
-        verify(sessaoService).existsSessaoByPautaIdAndStatusNotLikeCancelado(pautaId);
+        verify(sessaoService).existsSessaoByPautaId(pautaId);
         verify(sessaoMapper).toEntity(requestDTO);
         verify(sessaoService).saveSessao(sessaoEntityMapper);
         verify(sessaoMapper).toResponseDTO(savedSessaoEntity);
@@ -84,11 +84,11 @@ public class AbrirSessaoUseCaseTest {
         PautaEntity pautaEntity = new PautaEntity();
 
         when(pautaService.findPautaById(pautaId)).thenReturn(pautaEntity);
-        doThrow(new SessaoJaAbertaException()).when(sessaoService).existsSessaoByPautaIdAndStatusNotLikeCancelado(pautaId);
+        doThrow(new SessaoJaAbertaException()).when(sessaoService).existsSessaoByPautaId(pautaId);
 
         assertThrows(SessaoJaAbertaException.class, () -> abrirSessaoUseCase.execute(pautaId, requestDTO));
         verify(pautaService).findPautaById(pautaId);
-        verify(sessaoService).existsSessaoByPautaIdAndStatusNotLikeCancelado(pautaId);
+        verify(sessaoService).existsSessaoByPautaId(pautaId);
         verifyNoInteractions(sessaoMapper);
         verifyNoMoreInteractions(sessaoService);
     }

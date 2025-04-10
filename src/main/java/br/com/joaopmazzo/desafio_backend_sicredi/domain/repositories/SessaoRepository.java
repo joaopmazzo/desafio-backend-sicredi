@@ -13,8 +13,8 @@ import java.util.UUID;
 
 public interface SessaoRepository extends JpaRepository<SessaoEntity, UUID> {
 
-    @Query("SELECT COUNT(s) > 0 FROM SessaoEntity s WHERE s.pauta.id = :pautaId AND s.status <> 'CANCELADO'")
-    boolean existsByPautaIdAndStatusNotLikeCancelado(UUID pautaId);
+    @Query("SELECT COUNT(s) > 0 FROM SessaoEntity s WHERE s.pauta.id = :pautaId")
+    boolean existsByPautaId(UUID pautaId);
 
     Optional<SessaoEntity> findByPautaId(UUID pautaId);
 

@@ -29,8 +29,8 @@ public class SessaoService {
     }
 
     @Transactional(readOnly = true)
-    public void existsSessaoByPautaIdAndStatusNotLikeCancelado(UUID pautaID) {
-        if (sessaoRepository.existsByPautaIdAndStatusNotLikeCancelado(pautaID)) {
+    public void existsSessaoByPautaId(UUID pautaID) {
+        if (sessaoRepository.existsByPautaId(pautaID)) {
             throw new SessaoJaAbertaException();
         }
     }
