@@ -7,12 +7,23 @@ import br.com.joaopmazzo.desafio_backend_sicredi.domain.repositories.AssociadoRe
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+/**
+ * Camada de serviço para Associados.
+ */
 @Service
 @RequiredArgsConstructor
 public class AssociadoService {
 
     private final AssociadoRepository associadoRepository;
 
+    /**
+     * Valida se um associado existe e está apto a votar.
+     *
+     * @param documento Documento do associado a ser validado.
+     * @return Entidade AssociadoEntity validada.
+     * @throws AssociadoNotFoundException se o associado não for encontrado pelo documento fornecido.
+     * @throws AssociadoNaoPodeVotarException se o associado não estiver apto a votar.
+     */
     public AssociadoEntity validateAssociado(String documento) {
         AssociadoEntity associado = associadoRepository
                 .findByDocumento(documento)
