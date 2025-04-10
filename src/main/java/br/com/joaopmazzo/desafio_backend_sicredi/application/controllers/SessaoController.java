@@ -1,7 +1,7 @@
 package br.com.joaopmazzo.desafio_backend_sicredi.application.controllers;
 
 import br.com.joaopmazzo.desafio_backend_sicredi.application.dtos.response.SessaoResponseDTO;
-import br.com.joaopmazzo.desafio_backend_sicredi.domain.services.SessaoService;
+import br.com.joaopmazzo.desafio_backend_sicredi.application.usecases.ReturnSessoesUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,11 +15,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class SessaoController {
 
-    private final SessaoService sessaoService;
+    private final ReturnSessoesUseCase returnSessoesUseCase;
 
     @GetMapping
     public ResponseEntity<Page<SessaoResponseDTO>> returnAllSessoes(Pageable pageable) {
-        Page<SessaoResponseDTO> sessoes = sessaoService.getAllSessoes(pageable);
+        Page<SessaoResponseDTO> sessoes = returnSessoesUseCase.execute(pageable);
 
         return ResponseEntity.ok(sessoes);
     }

@@ -6,10 +6,7 @@ import br.com.joaopmazzo.desafio_backend_sicredi.application.dtos.request.VotoRe
 import br.com.joaopmazzo.desafio_backend_sicredi.application.dtos.response.PautaResponseDTO;
 import br.com.joaopmazzo.desafio_backend_sicredi.application.dtos.response.SessaoResponseDTO;
 import br.com.joaopmazzo.desafio_backend_sicredi.application.dtos.response.VotoResponseDTO;
-import br.com.joaopmazzo.desafio_backend_sicredi.application.usecases.CreatePautaUseCase;
-import br.com.joaopmazzo.desafio_backend_sicredi.application.usecases.FindPautaUseCase;
-import br.com.joaopmazzo.desafio_backend_sicredi.application.usecases.ReturnPautasUseCase;
-import br.com.joaopmazzo.desafio_backend_sicredi.domain.services.SessaoService;
+import br.com.joaopmazzo.desafio_backend_sicredi.application.usecases.*;
 import br.com.joaopmazzo.desafio_backend_sicredi.domain.services.VotoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +28,9 @@ public class PautaController {
     private final ReturnPautasUseCase returnPautasUseCase;
     private final FindPautaUseCase findPautaUseCase;
 
-    private final SessaoService sessaoService;
+    private final AbrirSessaoUseCase abrirSessaoUseCase;
+    private final FindSessaoUseCase findSessaoUseCase;
+
     private final VotoService votoService;
 
     // pautas
@@ -67,7 +66,7 @@ public class PautaController {
     @PostMapping("{pautaId}/sessao")
     public ResponseEntity<SessaoResponseDTO> openSessao(@PathVariable("pautaId") UUID pautaId,
                                                         @Valid @RequestBody SessaoRequestDTO dto) {
-        SessaoResponseDTO sessaoResponseDTO = sessaoService.abrirSessao(pautaId, dto);
+        SessaoResponseDTO sessaoResponseDTO = abrirSessaoUseCase.execute(pautaId, dto);
 
         URI location = UriComponentsBuilder
                 .fromPath("/api/v1/pautas/{pautaId}/sessao")
@@ -79,7 +78,7 @@ public class PautaController {
 
     @GetMapping("{pautaId}/sessao")
     public ResponseEntity<SessaoResponseDTO> getSessao(@PathVariable("pautaId") UUID pautaId) {
-        SessaoResponseDTO sessaoResponseDTO = sessaoService.getSessao(pautaId);
+        SessaoResponseDTO sessaoResponseDTO = findSessaoUseCase.execute(pautaId);
 
         return ResponseEntity.ok(sessaoResponseDTO);
     }

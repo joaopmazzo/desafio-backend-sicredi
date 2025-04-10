@@ -1,20 +1,17 @@
 package br.com.joaopmazzo.desafio_backend_sicredi.domain.services;
 
-import br.com.joaopmazzo.desafio_backend_sicredi.application.dtos.request.SessaoRequestDTO;
-import br.com.joaopmazzo.desafio_backend_sicredi.application.dtos.response.SessaoResponseDTO;
 import br.com.joaopmazzo.desafio_backend_sicredi.application.exceptions.sessao.SessaoJaAbertaException;
 import br.com.joaopmazzo.desafio_backend_sicredi.application.exceptions.sessao.SessaoNotFoundException;
-import br.com.joaopmazzo.desafio_backend_sicredi.domain.entities.PautaEntity;
 import br.com.joaopmazzo.desafio_backend_sicredi.domain.entities.SessaoEntity;
 import br.com.joaopmazzo.desafio_backend_sicredi.domain.enums.StatusSessaoEnum;
 import br.com.joaopmazzo.desafio_backend_sicredi.domain.repositories.SessaoRepository;
-import br.com.joaopmazzo.desafio_backend_sicredi.infrastructure.mappers.SessaoMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -23,45 +20,30 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class SessaoService {
 
-    private final PautaService pautaService;
     private final SessaoRepository sessaoRepository;
-    private final SessaoMapper sessaoMapper;
 
-    public SessaoResponseDTO abrirSessao(UUID pautaID, SessaoRequestDTO sessaoRequestDTO) {
-        PautaEntity pauta = pautaService.findPautaById(pautaID);
-
-        existsSessaoByPautaIdAndStatusNotLikeCancelado(pautaID);
-
-        SessaoEntity entity = sessaoMapper.toEntity(sessaoRequestDTO);
-        entity.setPauta(pauta);
-
-        SessaoEntity savedEntity = sessaoRepository.save(entity);
-
-        return sessaoMapper.toResponseDTO(savedEntity);
-    }
-
-    public Page<SessaoResponseDTO> getAllSessoes(Pageable pageable) {
-        Page<SessaoEntity> sessoes = sessaoRepository.findAll(pageable);
-
-        return sessoes.map(sessaoMapper::toResponseDTO);
-    }
-
-    public SessaoResponseDTO getSessao(UUID pautaID) {
-        SessaoEntity sessao = findSessaoByPautaId(pautaID);
-
-        return sessaoMapper.toResponseDTO(sessao);
-    }
-
+    @Transactional(readOnly = true)
     public SessaoEntity findSessaoByPautaId(UUID id) {
         return sessaoRepository
                 .findByPautaId(id)
                 .orElseThrow(SessaoNotFoundException::new);
     }
 
+    @Transactional(readOnly = true)
     public void existsSessaoByPautaIdAndStatusNotLikeCancelado(UUID pautaID) {
         if (sessaoRepository.existsByPautaIdAndStatusNotLikeCancelado(pautaID)) {
             throw new SessaoJaAbertaException();
         }
+    }
+
+    @Transactional(readOnly = true)
+    public Page<SessaoEntity> returnPautasPageable(Pageable pageable) {
+        return sessaoRepository.findAll(pageable);
+    }
+
+    @Transactional
+    public SessaoEntity saveSessao(SessaoEntity entity) {
+        return sessaoRepository.save(entity);
     }
 
     @Scheduled(fixedRate = 60000)
