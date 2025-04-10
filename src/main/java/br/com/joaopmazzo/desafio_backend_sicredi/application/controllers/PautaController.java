@@ -15,6 +15,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.net.URI;
 import java.util.UUID;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/v1/pautas")
 @RequiredArgsConstructor
@@ -47,6 +49,7 @@ public class PautaController {
             @ApiResponse(responseCode = "400", description = "Já existe uma pauta com esse título.", content = @Content)
     })
     public ResponseEntity<PautaResponseDTO> createPauta(@Valid @RequestBody PautaRequestDTO dto) {
+        log.info("Recebendo requisição para criar pauta: {}", dto);
         PautaResponseDTO pautaResponseDTO = createPautaUseCase.execute(dto);
 
         URI location = UriComponentsBuilder
@@ -54,6 +57,7 @@ public class PautaController {
                 .buildAndExpand(pautaResponseDTO.getId())
                 .toUri();
 
+        log.info("Pauta criada com sucesso: {}", pautaResponseDTO.getId());
         return ResponseEntity.created(location).body(pautaResponseDTO);
     }
 
@@ -93,6 +97,7 @@ public class PautaController {
     })
     public ResponseEntity<SessaoResponseDTO> openSessao(@PathVariable("pautaId") UUID pautaId,
                                                         @Valid @RequestBody SessaoRequestDTO dto) {
+        log.info("Recebendo requisição para iniciar uma sessao: ID da pauta={} dto={}", pautaId, dto);
         SessaoResponseDTO sessaoResponseDTO = abrirSessaoUseCase.execute(pautaId, dto);
 
         URI location = UriComponentsBuilder
@@ -100,6 +105,7 @@ public class PautaController {
                 .buildAndExpand(pautaId)
                 .toUri();
 
+        log.info("Sessão iniciada com sucesso: {}", sessaoResponseDTO.getId());
         return ResponseEntity.created(location).body(sessaoResponseDTO);
     }
 
@@ -127,6 +133,7 @@ public class PautaController {
     })
     public ResponseEntity<VotoResponseDTO> registerVoto(@PathVariable("pautaId") UUID pautaId,
                                                         @Valid @RequestBody VotoRequestDTO dto) {
+        log.info("Recebendo requisição para registrar voto: ID da pauta={} dto={}", pautaId, dto);
         VotoResponseDTO votoResponseDTO = registerVotoUseCase.execute(pautaId, dto);
 
         // TODO: refatorar isso
@@ -135,6 +142,7 @@ public class PautaController {
                 .buildAndExpand(pautaId)
                 .toUri();
 
+        log.info("Voto registrado com sucesso: {}", votoResponseDTO.getId());
         return ResponseEntity.created(location).body(votoResponseDTO);
     }
 
