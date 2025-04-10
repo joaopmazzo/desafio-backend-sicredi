@@ -35,16 +35,21 @@ public class ReturnPautasUseCaseTest {
     @DisplayName("Should return a paginated list of PautaResponseDTO when valid pageable is provided")
     void shouldReturnPaginatedListOfPautaResponseDTOWhenValidPageableProvided() {
         Pageable pageable = mock(Pageable.class);
-        Page<PautaEntity> pautaEntities = new PageImpl<>(List.of(new PautaEntity(), new PautaEntity()));
-        Page<PautaResponseDTO> pautaResponseDTOs = new PageImpl<>(List.of(new PautaResponseDTO(), new PautaResponseDTO()));
+        PautaEntity pautaEntity = new PautaEntity();
+        PautaResponseDTO pautaResponseDTO = new PautaResponseDTO();
+
+        Page<PautaEntity> pautaEntities = new PageImpl<>(List.of(pautaEntity, pautaEntity));
+        Page<PautaResponseDTO> expectedResponse = new PageImpl<>(List.of(pautaResponseDTO, pautaResponseDTO));
 
         when(pautaService.returnPautasPageable(pageable)).thenReturn(pautaEntities);
-        when(pautaMapper.toResponseDTO(new PautaEntity())).thenReturn(new PautaResponseDTO());
+        when(pautaMapper.toResponseDTO(any(PautaEntity.class))).thenReturn(pautaResponseDTO);
 
         Page<PautaResponseDTO> result = returnPautasUseCase.execute(pageable);
 
-        assertEquals(pautaResponseDTOs, result);
+        assertEquals(expectedResponse.getContent(), result.getContent());
+        assertEquals(expectedResponse.getTotalElements(), result.getTotalElements());
         verify(pautaService).returnPautasPageable(pageable);
+        verify(pautaMapper, times(2)).toResponseDTO(any(PautaEntity.class));
         assertFalse(result.isEmpty());
     }
 
