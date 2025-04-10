@@ -7,7 +7,6 @@ import br.com.joaopmazzo.desafio_backend_sicredi.application.dtos.response.Pauta
 import br.com.joaopmazzo.desafio_backend_sicredi.application.dtos.response.SessaoResponseDTO;
 import br.com.joaopmazzo.desafio_backend_sicredi.application.dtos.response.VotoResponseDTO;
 import br.com.joaopmazzo.desafio_backend_sicredi.application.usecases.*;
-import br.com.joaopmazzo.desafio_backend_sicredi.domain.services.VotoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -31,7 +30,7 @@ public class PautaController {
     private final AbrirSessaoUseCase abrirSessaoUseCase;
     private final FindSessaoUseCase findSessaoUseCase;
 
-    private final VotoService votoService;
+    private final RegisterVotoUseCase registerVotoUseCase;
 
     // pautas
     @PostMapping
@@ -95,7 +94,7 @@ public class PautaController {
     @PostMapping("{pautaId}/sessao/voto")
     public ResponseEntity<VotoResponseDTO> registerVoto(@PathVariable("pautaId") UUID pautaId,
                                                         @Valid @RequestBody VotoRequestDTO dto) {
-        VotoResponseDTO votoResponseDTO = votoService.registerVoto(pautaId, dto);
+        VotoResponseDTO votoResponseDTO = registerVotoUseCase.execute(pautaId, dto);
 
         // TODO: refatorar isso
         URI location = UriComponentsBuilder

@@ -1,5 +1,6 @@
 package br.com.joaopmazzo.desafio_backend_sicredi.domain.services;
 
+import br.com.joaopmazzo.desafio_backend_sicredi.application.exceptions.sessao.SessaoEncerradaException;
 import br.com.joaopmazzo.desafio_backend_sicredi.application.exceptions.sessao.SessaoJaAbertaException;
 import br.com.joaopmazzo.desafio_backend_sicredi.application.exceptions.sessao.SessaoNotFoundException;
 import br.com.joaopmazzo.desafio_backend_sicredi.domain.entities.SessaoEntity;
@@ -44,6 +45,14 @@ public class SessaoService {
     @Transactional
     public SessaoEntity saveSessao(SessaoEntity entity) {
         return sessaoRepository.save(entity);
+    }
+
+    public SessaoEntity validateSessao(UUID pautaId) {
+        SessaoEntity sessao = findSessaoByPautaId(pautaId);
+        if (sessao.getStatus() == StatusSessaoEnum.ENCERRADA || sessao.getTermino().isBefore(LocalDateTime.now())) {
+            throw new SessaoEncerradaException();
+        }
+        return sessao;
     }
 
     @Scheduled(fixedRate = 60000)
