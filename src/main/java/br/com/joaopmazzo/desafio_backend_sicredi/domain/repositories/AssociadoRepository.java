@@ -8,6 +8,12 @@ import java.util.UUID;
 
 public interface AssociadoRepository extends JpaRepository<AssociadoEntity, UUID> {
 
+    /**
+     * Busca um associado pelo documento fornecido.
+     *
+     * @param documento Documento do associado a ser buscado.
+     * @return Um Optional contendo a entidade AssociadoEntity correspondente, se encontrada.
+     */
     Optional<AssociadoEntity> findByDocumento(String documento);
 
 }

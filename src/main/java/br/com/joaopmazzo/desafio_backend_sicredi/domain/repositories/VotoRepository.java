@@ -9,6 +9,13 @@ import java.util.UUID;
 
 public interface VotoRepository extends JpaRepository<VotoEntity, UUID> {
 
+    /**
+     * Verifica se existe um voto registrado para um associado em uma determinada sessão.
+     *
+     * @param sessao Entidade SessaoEntity representando a sessão de votação.
+     * @param associado Entidade AssociadoEntity representando o associado.
+     * @return true se existir um voto registrado para o associado na sessão, caso contrário false.
+     */
     boolean existsBySessaoAndAssociado(SessaoEntity sessao, AssociadoEntity associado);
 
 }
