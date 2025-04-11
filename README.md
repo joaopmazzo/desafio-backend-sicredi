@@ -72,7 +72,7 @@ O projeto segue uma arquitetura limpa e bem organizada, com separação clara en
 
 2. Clone o repositório:
    ```bash
-   git clone https://github.com/seu-usuario/desafio-backend-sicredi.git
+   git clone https://github.com/joaopmazzo/desafio-backend-sicredi.git
    cd desafio-backend-sicredi
    ```
 
