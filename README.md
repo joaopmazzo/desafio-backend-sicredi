@@ -37,7 +37,7 @@ O projeto segue uma arquitetura limpa e bem organizada, com separação clara en
 
 - **Mensageria com RabbitMQ:**
     - O `ResultadoSessaoProducer` envia mensagens para a fila configurada.
-    - O `ResultadoSessaoConsumer` escuta mensagens na fila e processa os resultados das sessões de votação.
+    - O `ResultadoSessaoConsumer` escuta mensagens na fila, no código coloquei apenas um log para representar a captura da informação, mas pode entrar qualquer lógica julgada necessária, como por exemplo disparo de email ou trigger de websocket para plataforma.
 - **Scheduler com Quartz:**
     - Um agendador verifica periodicamente as sessões de votação que passaram do prazo de finalização, finaliza-as e envia os resultados para o RabbitMQ.
 - **API RESTful:**
