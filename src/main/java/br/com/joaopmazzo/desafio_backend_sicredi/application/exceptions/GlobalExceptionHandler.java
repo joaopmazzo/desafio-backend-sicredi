@@ -5,6 +5,8 @@ import br.com.joaopmazzo.desafio_backend_sicredi.application.exceptions.base.Res
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -32,6 +34,24 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Map<String, Object>> handleBusinessException(BusinessException ex) {
         log.error("Erro de regra de negócio: {}", ex.getMessage(), ex);
         return buildErrorResponse(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<Map<String, Object>> handleValidationExceptions(MethodArgumentNotValidException ex) {
+        log.error("Erro de validação: {}", ex.getMessage(), ex);
+
+        Map<String, String> validationErrors = new HashMap<>();
+        for (FieldError error : ex.getBindingResult().getFieldErrors()) {
+            validationErrors.put(error.getField(), error.getDefaultMessage());
+        }
+
+        Map<String, Object> errorResponse = new HashMap<>();
+        errorResponse.put("timestamp", LocalDateTime.now());
+        errorResponse.put("message", "Erro de validação nos campos fornecidos.");
+        errorResponse.put("status", HttpStatus.BAD_REQUEST.value());
+        errorResponse.put("errors", validationErrors);
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 
     private ResponseEntity<Map<String, Object>> buildErrorResponse(String message, HttpStatus status) {
