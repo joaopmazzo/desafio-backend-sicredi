@@ -4,6 +4,7 @@ import br.com.joaopmazzo.desafio_backend_sicredi.application.dtos.request.PautaR
 import br.com.joaopmazzo.desafio_backend_sicredi.application.dtos.request.SessaoRequestDTO;
 import br.com.joaopmazzo.desafio_backend_sicredi.application.dtos.request.VotoRequestDTO;
 import br.com.joaopmazzo.desafio_backend_sicredi.application.dtos.response.PautaResponseDTO;
+import br.com.joaopmazzo.desafio_backend_sicredi.application.dtos.response.ResultadoResponseDTO;
 import br.com.joaopmazzo.desafio_backend_sicredi.application.dtos.response.SessaoResponseDTO;
 import br.com.joaopmazzo.desafio_backend_sicredi.application.dtos.response.VotoResponseDTO;
 import br.com.joaopmazzo.desafio_backend_sicredi.domain.entities.AssociadoEntity;
@@ -176,7 +177,7 @@ public class PautaControllerIntegrationTest {
         HttpEntity<VotoRequestDTO> httpEntity = new HttpEntity<>(request);
 
         ResponseEntity<VotoResponseDTO> response = restTemplate.exchange(
-                "/api/v1/pautas/" + pautaSaved.getId() + "/sessao/voto",
+                "/api/v1/pautas/" + pautaSaved.getId() + "/voto",
                 HttpMethod.POST,
                 httpEntity,
                 VotoResponseDTO.class
@@ -190,6 +191,19 @@ public class PautaControllerIntegrationTest {
         assertThat(response.getBody().getAssociado().isAbleToVote()).isEqualTo(true);
         assertThat(response.getBody().getEscolhaVoto()).isNotNull();
         assertThat(response.getBody().getRegistradoEm()).isNotNull();
+    }
+
+    @Test
+    void shouldReturnResultadoByPautaIdWithSuccess() {
+        ResponseEntity<ResultadoResponseDTO> response = restTemplate.exchange(
+                "/api/v1/pautas/" + pautaSaved.getId() + "/resultado",
+                HttpMethod.GET,
+                null,
+                ResultadoResponseDTO.class
+        );
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody()).isNotNull();
     }
 
 }

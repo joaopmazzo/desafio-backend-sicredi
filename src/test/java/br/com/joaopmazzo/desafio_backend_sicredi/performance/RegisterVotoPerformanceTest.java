@@ -82,7 +82,7 @@ public class RegisterVotoPerformanceTest {
                 VotoRequestDTO request = new VotoRequestDTO(associado.getDocumento(), EscolhaVotoEnum.SIM);
                 HttpEntity<VotoRequestDTO> httpEntity = new HttpEntity<>(request);
                 ResponseEntity<VotoResponseDTO> response = restTemplate.exchange(
-                        "/api/v1/pautas/" + pauta.getId() + "/sessao/voto",
+                        "/api/v1/pautas/" + pauta.getId() + "/voto",
                         HttpMethod.POST,
                         httpEntity,
                         VotoResponseDTO.class
