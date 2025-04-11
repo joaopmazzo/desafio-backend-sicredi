@@ -4,6 +4,7 @@ import br.com.joaopmazzo.desafio_backend_sicredi.application.exceptions.voto.Vot
 import br.com.joaopmazzo.desafio_backend_sicredi.domain.entities.AssociadoEntity;
 import br.com.joaopmazzo.desafio_backend_sicredi.domain.entities.SessaoEntity;
 import br.com.joaopmazzo.desafio_backend_sicredi.domain.entities.VotoEntity;
+import br.com.joaopmazzo.desafio_backend_sicredi.domain.enums.EscolhaVotoEnum;
 import br.com.joaopmazzo.desafio_backend_sicredi.domain.repositories.VotoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,18 @@ import org.springframework.transaction.annotation.Transactional;
 public class VotoService {
 
     private final VotoRepository votoRepository;
+
+    /**
+     * Conta o número de votos a favor ou contra em uma sessão específica.
+     *
+     * @param sessao      Entidade representando a sessão de votação.
+     * @param escolhaVoto Enum representando a escolha do voto (a favor ou contra).
+     * @return O número de votos a favor ou contra na sessão.
+     */
+    @Transactional(readOnly = true)
+    public long countBySessaoAndEscolhaVoto(SessaoEntity sessao, EscolhaVotoEnum escolhaVoto) {
+        return votoRepository.countBySessaoAndAFavor(sessao, escolhaVoto);
+    }
 
     /**
      * Verifica se um associado já votou em uma determinada sessão.
