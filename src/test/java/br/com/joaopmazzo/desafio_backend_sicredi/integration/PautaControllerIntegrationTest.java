@@ -13,12 +13,14 @@ import br.com.joaopmazzo.desafio_backend_sicredi.domain.enums.EscolhaVotoEnum;
 import br.com.joaopmazzo.desafio_backend_sicredi.domain.repositories.AssociadoRepository;
 import br.com.joaopmazzo.desafio_backend_sicredi.domain.repositories.PautaRepository;
 import br.com.joaopmazzo.desafio_backend_sicredi.domain.repositories.SessaoRepository;
+import br.com.joaopmazzo.desafio_backend_sicredi.infrastructure.config.RabbitMQTestConfig;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -34,6 +36,7 @@ import static org.assertj.core.api.Assertions.within;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@Import(RabbitMQTestConfig.class)
 @ActiveProfiles("test")
 public class PautaControllerIntegrationTest {
 
@@ -185,7 +188,7 @@ public class PautaControllerIntegrationTest {
         assertThat(response.getBody().getSessao().getId()).isEqualTo(sessaoSaved.getId());
         assertThat(response.getBody().getAssociado().getId()).isEqualTo(associadoSaved.getId());
         assertThat(response.getBody().getAssociado().isAbleToVote()).isEqualTo(true);
-        assertThat(response.getBody().getAFavor()).isNotNull();
+        assertThat(response.getBody().getEscolhaVoto()).isNotNull();
         assertThat(response.getBody().getRegistradoEm()).isNotNull();
     }
 
