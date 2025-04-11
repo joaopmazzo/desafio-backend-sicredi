@@ -44,7 +44,7 @@ public class SessaoService {
         long totalVotos = totalAFavor + totalContra;
 
         // verifica qual o resultado da votação
-        ResultadoVotacaoEnum resultadoVotacao = Objects.equals(sessao.getStatus(), StatusSessaoEnum.ENCERRADA)
+        ResultadoVotacaoEnum resultadoVotacao = !Objects.equals(sessao.getStatus(), StatusSessaoEnum.ENCERRADA)
                 ? null : (totalAFavor > totalContra)
                 ? ResultadoVotacaoEnum.DEFERIDA : (totalAFavor < totalContra)
                 ? ResultadoVotacaoEnum.INDEFERIDA : ResultadoVotacaoEnum.INCONCLUSIVA;
