@@ -44,11 +44,11 @@ public class RegisterVotoUseCase {
      * @throws VotoJaRegistradoException se o associado já tiver votado na sessão.
      */
     public VotoResponseDTO execute(UUID pautaId, VotoRequestDTO dto) {
-        // Retorna a sessão pela pauta, status e que ainda não foi encerrada
-        SessaoEntity sessao = sessaoService.validateSessao(pautaId);
-
         // retorna o associado e valida se o mesmo pode votar
         AssociadoEntity associado = associadoService.validateAssociado(dto.documento());
+
+        // Retorna a sessão pela pauta, status e que ainda não foi encerrada
+        SessaoEntity sessao = sessaoService.validateSessao(pautaId);
 
         // Valida se o associado já votou, se sim joga uma exceção
         votoService.alreadyVoted(sessao, associado);
