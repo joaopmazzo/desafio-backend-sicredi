@@ -4,6 +4,7 @@ import br.com.joaopmazzo.desafio_backend_sicredi.application.dtos.request.PautaR
 import br.com.joaopmazzo.desafio_backend_sicredi.application.dtos.request.SessaoRequestDTO;
 import br.com.joaopmazzo.desafio_backend_sicredi.application.dtos.request.VotoRequestDTO;
 import br.com.joaopmazzo.desafio_backend_sicredi.application.dtos.response.PautaResponseDTO;
+import br.com.joaopmazzo.desafio_backend_sicredi.application.dtos.response.ResultadoResponseDTO;
 import br.com.joaopmazzo.desafio_backend_sicredi.application.dtos.response.SessaoResponseDTO;
 import br.com.joaopmazzo.desafio_backend_sicredi.application.dtos.response.VotoResponseDTO;
 import br.com.joaopmazzo.desafio_backend_sicredi.application.usecases.*;
@@ -27,7 +28,7 @@ import java.util.UUID;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/v1/pautas")
+@RequestMapping(value = "/api/v1/pautas", produces = "application/json")
 @RequiredArgsConstructor
 @Tag(name = "Pautas", description = "Gerenciamento de pautas, sessões de votação e votos")
 public class PautaController {
@@ -40,6 +41,8 @@ public class PautaController {
     private final FindSessaoUseCase findSessaoUseCase;
 
     private final RegisterVotoUseCase registerVotoUseCase;
+
+    private final FindResultadoPautaUseCase findResultadoPautaUseCase;
 
     @PostMapping
     @Operation(summary = "Criar uma nova pauta", description = "Cria uma nova pauta para votação.")
@@ -123,7 +126,7 @@ public class PautaController {
     }
 
 
-    @PostMapping("{pautaId}/sessao/voto")
+    @PostMapping("{pautaId}/voto")
     @Operation(summary = "Registrar voto", description = "Registra um voto em uma sessão de votação.")
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "Voto registrado com sucesso",
@@ -136,14 +139,21 @@ public class PautaController {
         log.info("Recebendo requisição para registrar voto: ID da pauta={} dto={}", pautaId, dto);
         VotoResponseDTO votoResponseDTO = registerVotoUseCase.execute(pautaId, dto);
 
-        // TODO: refatorar isso
-        URI location = UriComponentsBuilder
-                .fromPath("/api/v1/pautas/{pautaId}/sessao/voto")
-                .buildAndExpand(pautaId)
-                .toUri();
-
         log.info("Voto registrado com sucesso: {}", votoResponseDTO.getId());
-        return ResponseEntity.created(location).body(votoResponseDTO);
+        return ResponseEntity.created(null).body(votoResponseDTO);
+    }
+
+    @GetMapping("{pautaId}/resultado")
+    @Operation(summary = "Resultado da votação", description = "Retorna o resultado da votação de uma pauta.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Resultado da votação encontrado",
+                    content = @Content(schema = @Schema(implementation = ResultadoResponseDTO.class))),
+            @ApiResponse(responseCode = "404", description = "Sessão não encontrada.", content = @Content)
+    })
+    public ResponseEntity<ResultadoResponseDTO> getResultado(@PathVariable("pautaId") UUID pautaId) {
+        ResultadoResponseDTO resultadoResponseDTO = findResultadoPautaUseCase.execute(pautaId);
+
+        return ResponseEntity.ok(resultadoResponseDTO);
     }
 
 }
