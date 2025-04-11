@@ -10,6 +10,7 @@ import br.com.joaopmazzo.desafio_backend_sicredi.domain.repositories.AssociadoRe
 import br.com.joaopmazzo.desafio_backend_sicredi.domain.repositories.PautaRepository;
 import br.com.joaopmazzo.desafio_backend_sicredi.domain.repositories.SessaoRepository;
 import br.com.joaopmazzo.desafio_backend_sicredi.infrastructure.config.RabbitMQTestConfig;
+import br.com.joaopmazzo.desafio_backend_sicredi.utils.CpfUtils;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,7 +68,7 @@ public class RegisterVotoPerformanceTest {
                 .build());
         List<AssociadoEntity> associados = IntStream.range(0, THREAD_COUNT)
                 .mapToObj(i -> associadoRepository.save(AssociadoEntity.builder()
-                        .documento("123456789" + i)
+                        .documento(CpfUtils.generateValidCpf())
                         .ableToVote(true)
                         .build()))
                 .toList();

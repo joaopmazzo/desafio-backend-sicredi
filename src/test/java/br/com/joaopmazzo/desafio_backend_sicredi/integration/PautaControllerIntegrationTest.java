@@ -15,6 +15,7 @@ import br.com.joaopmazzo.desafio_backend_sicredi.domain.repositories.AssociadoRe
 import br.com.joaopmazzo.desafio_backend_sicredi.domain.repositories.PautaRepository;
 import br.com.joaopmazzo.desafio_backend_sicredi.domain.repositories.SessaoRepository;
 import br.com.joaopmazzo.desafio_backend_sicredi.infrastructure.config.RabbitMQTestConfig;
+import br.com.joaopmazzo.desafio_backend_sicredi.utils.CpfUtils;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -62,6 +63,8 @@ public class PautaControllerIntegrationTest {
 
     private static final Integer DURACAO_MINUTOS = 1;
 
+    private static final String CPF = CpfUtils.generateValidCpf();
+
     @BeforeAll
     void setUp() {
         pauta = PautaEntity.builder()
@@ -81,7 +84,7 @@ public class PautaControllerIntegrationTest {
                 .build());
 
         associadoSaved = associadoRepository.save(AssociadoEntity.builder()
-                .documento("12345678900")
+                .documento(CPF)
                 .ableToVote(true)
                 .build());
     }
@@ -172,7 +175,7 @@ public class PautaControllerIntegrationTest {
 
     @Test
     void shouldRegisterVotoWithSuccess() {
-        VotoRequestDTO request = new VotoRequestDTO("12345678900", EscolhaVotoEnum.SIM);
+        VotoRequestDTO request = new VotoRequestDTO(CPF, EscolhaVotoEnum.SIM);
 
         HttpEntity<VotoRequestDTO> httpEntity = new HttpEntity<>(request);
 
