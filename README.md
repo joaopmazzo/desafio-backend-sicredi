@@ -105,14 +105,14 @@ A aplicação possui uma lista de CPF/CNPJ cadastrados no sistema para testes, i
 
 | CPF/CNPJ         | Pode Votar |
 |------------------|------------|
-| 12345678901      | Sim        |
-| 98765432100      | Não        |
-| 12345678000195   | Sim        |
-| 98765432000100   | Não        |
-| 11122233344      | Sim        |
-| 55566677788      | Não        |
-| 11222333000181   | Sim        |
-| 99887766000199   | Não        |
+| 72661702067      | Sim        |
+| 51437993095      | Sim        |
+| 73331659061      | Sim        |
+| 10312139020      | Não        |
+| 69286897065      | Sim        |
+| 26989776048      | Não        |
+| 84018997027      | Sim        |
+| 36690146081      | Não        |
 
 Esses dados podem ser utilizados para validar as funcionalidades relacionadas ao registro de votos na aplicação.
 
