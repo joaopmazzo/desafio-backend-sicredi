@@ -26,6 +26,6 @@ public interface VotoRepository extends JpaRepository<VotoEntity, UUID> {
      * @param escolhaVoto Enum representando a escolha do voto (a favor ou contra).
      * @return O número de votos a favor ou contra na sessão.
      */
-    long countBySessaoAndAFavor(SessaoEntity sessao, EscolhaVotoEnum escolhaVoto);
+    long countBySessaoAndEscolhaVoto(SessaoEntity sessao, EscolhaVotoEnum escolhaVoto);
 
 }

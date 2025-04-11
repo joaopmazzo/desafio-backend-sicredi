@@ -15,7 +15,7 @@ public class VotoResponseDTO {
 
     private AssociadoResponseDTO associado;
 
-    private EscolhaVotoEnum aFavor;
+    private EscolhaVotoEnum escolhaVoto;
 
     private LocalDateTime registradoEm;
 

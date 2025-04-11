@@ -33,9 +33,9 @@ public class VotoEntity {
     @JoinColumn(name = "associado_id", nullable = false)
     private AssociadoEntity associado;
 
-    @Column(name = "a_favor", nullable = false)
+    @Column(name = "escolha_voto", nullable = false)
     @Enumerated(EnumType.STRING)
-    private EscolhaVotoEnum aFavor;
+    private EscolhaVotoEnum escolhaVoto;
 
     @Column(nullable = false, updatable = false)
     @CreationTimestamp

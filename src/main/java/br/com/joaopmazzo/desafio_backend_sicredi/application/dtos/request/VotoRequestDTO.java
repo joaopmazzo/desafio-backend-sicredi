@@ -7,6 +7,6 @@ public record VotoRequestDTO(
     @NotNull(message = "O documento não pode ser nulo.")
     String documento,
 
-    @NotNull(message = "O status do voto não pode ser nulo.")
-    EscolhaVotoEnum aFavor
+    @NotNull(message = "A escolha do voto não pode ser nulo.")
+    EscolhaVotoEnum escolhaVoto
 ) {}

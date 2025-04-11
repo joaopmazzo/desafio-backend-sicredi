@@ -28,7 +28,7 @@ public class VotoService {
      */
     @Transactional(readOnly = true)
     public long countBySessaoAndEscolhaVoto(SessaoEntity sessao, EscolhaVotoEnum escolhaVoto) {
-        return votoRepository.countBySessaoAndAFavor(sessao, escolhaVoto);
+        return votoRepository.countBySessaoAndEscolhaVoto(sessao, escolhaVoto);
     }
 
     /**

@@ -57,7 +57,7 @@ public class RegisterVotoUseCase {
         VotoEntity voto = VotoEntity.builder()
                 .sessao(sessao)
                 .associado(associado)
-                .aFavor(dto.aFavor())
+                .escolhaVoto(dto.escolhaVoto())
                 .build();
 
         // Salva a entidade no banco de dados
